@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { assets } from "../modules/exports/assets";
 
 export const Header = () => {
@@ -11,26 +12,97 @@ export const Header = () => {
         { label: 'Услуги', submenu: ['Доставка', 'Монтаж'] },
     ];
 
+    // Анимация для появления элементов
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: -10 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.3
+            }
+        }
+    };
+
+    const buttonVariants = {
+        initial: { scale: 1 },
+        hover: { 
+            scale: 1.05,
+            transition: { duration: 0.2 }
+        },
+        tap: { scale: 0.95 }
+    };
+
+    const submenuVariants = {
+        hidden: { 
+            opacity: 0, 
+            y: 10,
+            transition: {
+                duration: 0.2
+            }
+        },
+        visible: { 
+            opacity: 1, 
+            y: 0,
+            transition: {
+                duration: 0.3
+            }
+        }
+    };
+
     return (
-        <header className="bg-white sm:px-4 py-3 relative z-50 font-sans">
+        <motion.header 
+            className="bg-white sm:px-4 py-3 relative z-50 font-sans"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             <div className="sm:container mx-auto flex items-center justify-between gap-4">
                 <div className="flex-shrink-0 flex items-center gap-10">
-                    <img
+                    <motion.img
                         src={assets['logo_fin_1']}
                         alt="ЭКО-ТЕХ Деревянные дома"
                         className="h-10 md:h-12 w-auto"
+                        variants={itemVariants}
                     />
-                    <button className="items-center xs:flex hidden gap-2 px-4 py-2 rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors">
+                    <motion.button 
+                        className="items-center xs:flex hidden gap-2 px-4 py-2 rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors"
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                    >
                         <img src={assets['burger']} alt="" className="h-4 w-4" />
                         <span className="text-sm font-sans">Меню</span>
-                    </button>
+                    </motion.button>
                 </div>
 
-                <nav className="hidden xl:flex items-center gap-6 font-medium text-gray-700 font-sans">
+                <motion.nav 
+                    className="hidden xl:flex items-center gap-6 font-medium text-gray-700 font-sans"
+                    variants={containerVariants}
+                >
                     {menuItems.map((item) =>
                         item.submenu ? (
-                            <div key={item.label} className="relative group">
-                                <button className="flex items-center gap-1 hover:text-green-600 transition-colors font-sans group">
+                            <motion.div 
+                                key={item.label} 
+                                className="relative group"
+                                variants={itemVariants}
+                            >
+                                <motion.button 
+                                    className="flex items-center gap-1 hover:text-green-600 transition-colors font-sans group"
+                                    variants={buttonVariants}
+                                    whileHover="hover"
+                                    whileTap="tap"
+                                >
                                     {item.label}
                                     <svg 
                                         width="9" 
@@ -48,52 +120,90 @@ export const Header = () => {
                                             strokeLinejoin="round" 
                                         />
                                     </svg>
-                                </button>
-                                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                                </motion.button>
+                                <motion.div 
+                                    className="absolute left-1/2 -translate-x-1/2 top-full mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10"
+                                    variants={submenuVariants}
+                                    initial="hidden"
+                                    whileHover="visible"
+                                >
                                     {item.submenu.map((sub) => (
-                                        <a
+                                        <motion.a
                                             key={sub}
                                             href="#"
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-sans"
+                                            whileHover={{ x: 5 }}
+                                            transition={{ duration: 0.2 }}
                                         >
                                             {sub}
-                                        </a>
+                                        </motion.a>
                                     ))}
-                                </div>
-                            </div>
+                                </motion.div>
+                            </motion.div>
                         ) : (
-                            <button key={item.label} className="hover:text-green-600 transition-colors font-sans">
+                            <motion.button 
+                                key={item.label} 
+                                className="hover:text-green-600 transition-colors font-sans"
+                                variants={itemVariants}
+                                whileHover="hover"
+                                whileTap="tap"
+                            >
                                 {item.label}
-                            </button>
+                            </motion.button>
                         )
                     )}
-                </nav>
+                </motion.nav>
 
-                <div className="flex items-center gap-4 xl:gap-6 font-sans">
-                    <a
+                <motion.div 
+                    className="flex items-center gap-4 xl:gap-6 font-sans"
+                    variants={containerVariants}
+                >
+                    <motion.a
                         href="tel:88003339191"
                         className="font-semibold text-gray-800 xs:block hidden hover:text-green-600 transition-colors whitespace-nowrap font-sans"
+                        variants={itemVariants}
+                        whileHover={{ scale: 1.05 }}
                     >
                         8 (800) 333-91-91
-                    </a>
+                    </motion.a>
 
-                    <button className="w-10 h-10 xs:hidden flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors">
+                    <motion.button 
+                        className="w-10 h-10 xs:hidden flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors"
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                    >
                         <img src={assets['phone']} alt="Телефон" className="h-4 w-4" />
-                    </button>
+                    </motion.button>
 
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors">
+                    <motion.button 
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors"
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                    >
                         <img src={assets['loop']} alt="Поиск" className="h-4 w-4" />
-                    </button>
+                    </motion.button>
 
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors">
+                    <motion.button 
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors"
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                    >
                         <img src={assets['like']} alt="Избранное" className="h-4 w-4" />
-                    </button>
+                    </motion.button>
 
-                    <button className="w-10 h-10 xs:hidden flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors">
+                    <motion.button 
+                        className="w-10 h-10 xs:hidden flex items-center justify-center rounded-full bg-[#EAE3E1]/60 hover:bg-gray-100 transition-colors"
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                    >
                         <img src={assets['burger']} alt="Бургер" className="h-4 w-4" />
-                    </button>
-                </div>
+                    </motion.button>
+                </motion.div>
             </div>
-        </header>
+        </motion.header>
     );
 };
